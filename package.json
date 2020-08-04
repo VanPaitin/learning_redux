@@ -1,0 +1,27 @@
+{
+  "license": "UNLICENSED",
+  "type": "module",
+  "scripts": {
+    "test": "node addCounter.spec.js; node todoReducer.spec.js",
+    "watch": "webpack --watch",
+    "start": "webpack-dev-server --open",
+    "build": "webpack"
+  },
+  "dependencies": {
+    "deep-freeze": "^0.0.1",
+    "expect": "^26.2.0",
+    "redux": "^4.0.5"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.11.0",
+    "@babel/plugin-proposal-class-properties": "^7.10.4",
+    "@babel/preset-env": "^7.11.0",
+    "@babel/preset-react": "^7.10.4",
+    "babel-loader": "^8.1.0",
+    "colors": "^1.4.0",
+    "redux-devtools-extension": "^2.13.8",
+    "webpack": "^4.44.1",
+    "webpack-cli": "^3.3.12",
+    "webpack-dev-server": "^3.11.0"
+  }
+}
