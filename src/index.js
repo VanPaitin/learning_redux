@@ -1,11 +1,15 @@
 import { createStore } from 'redux';
+import TodoApp from './Components/TodoApp';
+import { todoApp } from '../todoReducer';
+import { composeWithDevTools } from 'redux-devtools-extension';
+
+/* Counter Section
 
 let increment = 'INCREMENT';
 let decrement = 'DECREMENT';
 
 let counter = (state = 0, action) => {
   switch (action.type) {
-
     case increment:
       return state + 1;
 
@@ -34,6 +38,16 @@ const render = () => {
       onIncrement={() => store.dispatch({ type: increment })}
       onDecrement={() => store.dispatch({ type: decrement })} />,
     document.getElementById('root')
+  )
+}
+
+*/
+
+window.store = createStore(todoApp, composeWithDevTools());
+
+const render = () => {
+  ReactDOM.render(
+    <TodoApp {...store.getState()} />, document.getElementById('root')
   )
 }
 
