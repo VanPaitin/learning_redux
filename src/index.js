@@ -1,7 +1,5 @@
-import { createStore } from 'redux';
+// import { createStore } from 'redux';
 import TodoApp from './Components/TodoApp';
-import { todoApp } from '../todoReducer';
-import { composeWithDevTools } from 'redux-devtools-extension';
 
 /* Counter Section
 
@@ -43,13 +41,7 @@ const render = () => {
 
 */
 
-window.store = createStore(todoApp, composeWithDevTools());
 
-const render = () => {
-  ReactDOM.render(
-    <TodoApp {...store.getState()} />, document.getElementById('root')
-  )
-}
-
-store.subscribe(render);
-render();
+ReactDOM.render(
+  <TodoApp />, document.getElementById('root')
+)
