@@ -1,4 +1,4 @@
-const Link = ({ active, children, onClick }) => {
+let Link = ({ active, children, onClick }) => {
   return active ? <span>{children}</span> :
     <a
       href='#'
@@ -10,27 +10,14 @@ const Link = ({ active, children, onClick }) => {
     </a>
 }
 
-export default class FilterLink extends React.Component {
-  componentDidMount() {
-    this.unsubscribe = store.subscribe(() => this.forceUpdate())
-  }
+const mapStateToProps = (state, { filter }) => ({
+  active: filter === state.visibilityFilter
+})
 
-  componentWillUnmount() {
-    this.unsubscribe();
-  }
+const mapDispatchToProps = (dispatch, { filter }) => ({
+  onClick: () => dispatch({ type: 'SET_VISIBILITY_FILTER', filter })
+})
 
-  render() {
-    const { filter, children } = this.props;
-    const { visibilityFilter } = store.getState();
+const { connect } = ReactRedux;
 
-    return (
-      <Link
-        active={
-          filter === visibilityFilter
-        }
-        onClick={() => store.dispatch({ type: 'SET_VISIBILITY_FILTER', filter: filter })}>
-        {children}
-      </Link>
-    )
-  }
-}
+export default connect(mapStateToProps, mapDispatchToProps)(Link)

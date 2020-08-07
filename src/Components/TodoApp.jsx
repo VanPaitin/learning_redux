@@ -6,11 +6,9 @@ import { todoApp } from '../../todoReducer';
 import FilterLink from './FilterLink';
 import VisibleTodoList from './VisibleTodoList';
 
-window.store = createStore(todoApp, composeWithDevTools());
-
 let nextTodoId = 0;
 
-const AddTodo = () => {
+let AddTodo = ({ dispatch }) => {
   let input;
 
   return (
@@ -19,7 +17,7 @@ const AddTodo = () => {
         input = node
       }} />
       <button onClick={() => {
-        store.dispatch({
+        dispatch({
           type: 'ADD_TODO', text: input.value, id: nextTodoId++
         });
         input.value = ''
@@ -27,6 +25,17 @@ const AddTodo = () => {
     </div>
   )
 }
+
+const { Provider, connect } = ReactRedux
+
+AddTodo = connect()(AddTodo)
+
+export default () =>
+  <Provider store={createStore(todoApp, composeWithDevTools())}>
+    <AddTodo />
+    <VisibleTodoList />
+    <Footer />
+  </Provider>
 
 const Footer = () =>
   <p>
@@ -36,10 +45,3 @@ const Footer = () =>
     <FilterLink filter='SHOW_ACTIVE'>Active</FilterLink>&nbsp;&nbsp;
     <FilterLink filter='SHOW_COMPLETED'>Completed</FilterLink>&nbsp;&nbsp;
   </p>
-
-export default () =>
-  <div>
-    <AddTodo />
-    <VisibleTodoList />
-    <Footer />
-  </div>
