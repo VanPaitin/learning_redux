@@ -21,14 +21,14 @@ const getVisibleTodos = (todos, filter) => {
   }
 }
 
-const mapStateToProps = (state) => {
-  return {
-    todos: getVisibleTodos(state.todos, state.visibilityFilter)
-  }
-}
+const toggleTodo = id => ({ type: 'TOGGLE_TODO', id })
+
+const mapStateToProps = state => ({
+  todos: getVisibleTodos(state.todos, state.visibilityFilter)
+})
 
 const mapDispatchToProps = dispatch => ({
-  onTodoClick: id => dispatch({ type: 'TOGGLE_TODO', id })
+  onTodoClick: id => dispatch(toggleTodo(id))
 })
 
 const { connect } = ReactRedux;
