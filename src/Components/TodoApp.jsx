@@ -8,6 +8,12 @@ import VisibleTodoList from './VisibleTodoList';
 
 let nextTodoId = 0;
 
+const addTodo = text => ({
+  type: 'ADD_TODO',
+  id: nextTodoId++,
+  text
+})
+
 let AddTodo = ({ dispatch }) => {
   let input;
 
@@ -17,9 +23,7 @@ let AddTodo = ({ dispatch }) => {
         input = node
       }} />
       <button onClick={() => {
-        dispatch({
-          type: 'ADD_TODO', text: input.value, id: nextTodoId++
-        });
+        dispatch(addTodo(input.value));
         input.value = ''
       }}>Add Todo</button>
     </div>
