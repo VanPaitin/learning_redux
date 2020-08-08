@@ -1,16 +1,18 @@
 import { createStore } from 'redux';
 import { composeWithDevTools } from 'redux-devtools-extension';
+import { v4 } from 'node-uuid';
+import throttle from 'lodash/throttle';
+
 
 import { todoApp } from '../todoReducer';
+import { loadState, saveState } from '../localstorage';
 
 import FilterLink from './FilterLink';
 import VisibleTodoList from './VisibleTodoList';
 
-let nextTodoId = 1;
-
 const addTodo = text => ({
   type: 'ADD_TODO',
-  id: nextTodoId++,
+  id: v4(),
   text
 })
 
@@ -34,12 +36,14 @@ const { Provider, connect } = ReactRedux
 
 AddTodo = connect()(AddTodo)
 
-const persistedState = {
-  todos: [{ id: 0, text: 'Welcome Back', completed: false }]
-}
+const persistedState = loadState()
+
+const store = createStore(todoApp, persistedState, composeWithDevTools())
+
+store.subscribe(throttle(() => saveState({ todos: store.getState().todos }), 1000))
 
 export default () =>
-  <Provider store={createStore(todoApp, persistedState, composeWithDevTools())}>
+  <Provider store={store}>
     <AddTodo />
     <VisibleTodoList />
     <Footer />

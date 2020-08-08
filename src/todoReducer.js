@@ -1,7 +1,8 @@
 import { combineReducers } from 'redux';
 
-let addTodo = 'ADD_TODO';
-let toggleTodo = 'TOGGLE_TODO';
+const addTodo = 'ADD_TODO';
+const toggleTodo = 'TOGGLE_TODO';
+const removeTodo = 'REMOVE_TODO';
 
 const todo = (state, action) => {
   switch(action.type) {
@@ -25,6 +26,8 @@ export const todos = (state = [], action) => {
       return [...state, todo(undefined, action)]
     case toggleTodo:
       return state.map(todoItem => todo(todoItem, action));
+    case removeTodo:
+      return state.filter(todoItem => todoItem.id !== action.id)
     default:
      return state
   }
