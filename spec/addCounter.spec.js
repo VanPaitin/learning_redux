@@ -1,7 +1,7 @@
 import 'colors'
 import deepFreeze from 'deep-freeze';
 import expect from 'expect';
-import { addCounter, removeCounter, incrementCounter } from './addCounter.js';
+import { addCounter, removeCounter, incrementCounter } from '../src/addCounter.js';
 
 const testAddCounter = () => {
   const listBefore = [];

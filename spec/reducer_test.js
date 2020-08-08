@@ -1,4 +1,5 @@
-// let expect = require('expect');
+import { createStore } from 'redux';
+
 let increment = 'INCREMENT';
 let decrement = 'DECREMENT';
 
@@ -16,7 +17,6 @@ let counter = (state = 0, action) => {
   }
 }
 
-let { createStore } = Redux;
 const store = createStore(counter);
 console.log(store.getState());
 store.dispatch({ type: increment })

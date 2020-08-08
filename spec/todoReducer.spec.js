@@ -1,7 +1,7 @@
 import 'colors';
 import deepFreeze from 'deep-freeze';
 import expect from 'expect';
-import { todos } from './todoReducer.js';
+import { todos } from '../src/todoReducer.js';
 
 const testAddTodo = () => {
   const stateBefore = [];
