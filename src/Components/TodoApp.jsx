@@ -1,12 +1,12 @@
 import { createStore } from 'redux';
 import { composeWithDevTools } from 'redux-devtools-extension';
 
-import { todoApp } from '../../todoReducer';
+import { todoApp } from '../todoReducer';
 
 import FilterLink from './FilterLink';
 import VisibleTodoList from './VisibleTodoList';
 
-let nextTodoId = 0;
+let nextTodoId = 1;
 
 const addTodo = text => ({
   type: 'ADD_TODO',
@@ -34,8 +34,12 @@ const { Provider, connect } = ReactRedux
 
 AddTodo = connect()(AddTodo)
 
+const persistedState = {
+  todos: [{ id: 0, text: 'Welcome Back', completed: false }]
+}
+
 export default () =>
-  <Provider store={createStore(todoApp, composeWithDevTools())}>
+  <Provider store={createStore(todoApp, persistedState, composeWithDevTools())}>
     <AddTodo />
     <VisibleTodoList />
     <Footer />

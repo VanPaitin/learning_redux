@@ -1,4 +1,3 @@
-// import { createStore } from 'redux';
 import TodoApp from './Components/TodoApp';
 
 /* Counter Section
