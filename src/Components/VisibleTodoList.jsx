@@ -1,9 +1,9 @@
 const Todo = ({ completed, text, onClick, removeTodo }) =>
   <li
     onClick={onClick}
-    style={{ textDecoration: completed ? 'line-through' : 'none' }}
+    style={{ textDecoration: completed ? 'line-through' : 'none', width: '200px', height: '30px' }}
   >
-    {text} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    {text}
     <a
       href='#'
       onClick={e => {
@@ -11,7 +11,7 @@ const Todo = ({ completed, text, onClick, removeTodo }) =>
         e.stopPropagation()
         removeTodo()
       }}>
-      X
+      <i style={{ fontSize: '13px', color: '#000', float: 'right' }} className="fas fa-trash"></i>
     </a>
   </li>
 

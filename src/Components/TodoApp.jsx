@@ -1,40 +1,15 @@
 import { createStore } from 'redux';
 import { composeWithDevTools } from 'redux-devtools-extension';
-import { v4 } from 'node-uuid';
 import throttle from 'lodash/throttle';
-
 
 import { todoApp } from '../todoReducer';
 import { loadState, saveState } from '../localstorage';
 
+import AddTodo from './AddTodo';
 import FilterLink from './FilterLink';
 import VisibleTodoList from './VisibleTodoList';
 
-const addTodo = text => ({
-  type: 'ADD_TODO',
-  id: v4(),
-  text
-})
-
-let AddTodo = ({ dispatch }) => {
-  let input;
-
-  return (
-    <div>
-      <input ref={node => {
-        input = node
-      }} />
-      <button onClick={() => {
-        dispatch(addTodo(input.value));
-        input.value = ''
-      }}>Add Todo</button>
-    </div>
-  )
-}
-
-const { Provider, connect } = ReactRedux
-
-AddTodo = connect()(AddTodo)
+const { Provider } = ReactRedux
 
 const persistedState = loadState()
 
