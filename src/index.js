@@ -1,4 +1,4 @@
-import TodoApp from './Components/TodoApp';
+import Root from './Components/Root';
 
 /* Counter Section
 
@@ -42,5 +42,5 @@ const render = () => {
 
 
 ReactDOM.render(
-  <TodoApp />, document.getElementById('root')
+  <Root />, document.getElementById('root')
 )
