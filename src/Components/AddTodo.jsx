@@ -1,6 +1,6 @@
+import React from 'react';
+import { connect } from 'react-redux';
 import { v4 } from 'node-uuid';
-
-const { connect } = ReactRedux;
 
 const addTodo = text => ({
   type: 'ADD_TODO',

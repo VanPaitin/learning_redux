@@ -1,3 +1,6 @@
+import React from 'react';
+import { connect } from 'react-redux';
+
 const Todo = ({ completed, text, onClick, removeTodo }) =>
   <li
     onClick={onClick}
@@ -42,7 +45,5 @@ const mapDispatchToProps = dispatch => ({
   onTodoClick: id => dispatch(toggleTodo(id)),
   removeTodo: id => dispatch(removeTodo(id))
 })
-
-const { connect } = ReactRedux;
 
 export default connect(mapStateToProps, mapDispatchToProps)(TodoList)

@@ -1,3 +1,6 @@
+import React from 'react';
+import { connect } from 'react-redux';
+
 const Link = ({ active, children, onClick }) => {
   return active ? <span>{children}</span> :
     <a
@@ -22,8 +25,6 @@ const mapStateToProps = (state, { filter }) => ({
 const mapDispatchToProps = (dispatch, { filter }) => ({
   onClick: () => dispatch(setVisibilityFilter(filter))
 })
-
-const { connect } = ReactRedux;
 
 const FilterLink = connect(mapStateToProps, mapDispatchToProps)(Link)
 

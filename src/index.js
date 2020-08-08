@@ -1,4 +1,6 @@
+import React from 'react';
 import Root from './Components/Root';
+import ReactDOM from 'react-dom';
 
 /* Counter Section
 
