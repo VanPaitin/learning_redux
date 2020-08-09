@@ -33,6 +33,14 @@ export const todos = (state = [], action) => {
   }
 }
 
+export const getVisibleTodos = ({ todos }, filter) => {
+  switch (filter) {
+    case 'active': return todos.filter(todo => !todo.completed)
+    case 'complete': return todos.filter(todo => todo.completed)
+    default: return todos
+  }
+}
+
 // const visibilityFilter = (state = 'SHOW_ALL', action) => {
 //   switch (action.type) {
 //     case 'SET_VISIBILITY_FILTER': return action.filter
