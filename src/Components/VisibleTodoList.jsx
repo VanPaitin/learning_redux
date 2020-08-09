@@ -27,8 +27,8 @@ const TodoList = ({ todos, onTodoClick, removeTodo }) =>
 
 const getVisibleTodos = (todos, filter) => {
   switch (filter) {
-    case 'SHOW_ACTIVE': return todos.filter(todo => !todo.completed)
-    case 'SHOW_COMPLETED': return todos.filter(todo => todo.completed)
+    case 'active': return todos.filter(todo => !todo.completed)
+    case 'complete': return todos.filter(todo => todo.completed)
     default: return todos
   }
 }
@@ -37,8 +37,8 @@ const toggleTodo = id => ({ type: 'TOGGLE_TODO', id })
 
 const removeTodo = id => ({ type: 'REMOVE_TODO', id })
 
-const mapStateToProps = state => ({
-  todos: getVisibleTodos(state.todos, state.visibilityFilter)
+const mapStateToProps = (state, { filter }) => ({
+  todos: getVisibleTodos(state.todos, filter)
 })
 
 const mapDispatchToProps = dispatch => ({

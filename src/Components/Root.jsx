@@ -1,5 +1,6 @@
 import React from 'react';
 import { Provider } from 'react-redux';
+import { BrowserRouter, Route } from 'react-router-dom';
 
 import createStore from '../store';
 
@@ -9,9 +10,16 @@ import VisibleTodoList from './VisibleTodoList';
 
 const store = createStore();
 
+const App = ({ match : { params } }) =>
+  <>
+    <AddTodo />
+    <VisibleTodoList filter={params.filter} />
+    <Footer />
+  </>
+
 export default () =>
   <Provider store={store}>
-    <AddTodo />
-    <VisibleTodoList />
-    <Footer />
+    <BrowserRouter>
+      <Route exact path='/:filter?' component={App} />
+    </BrowserRouter>
   </Provider>

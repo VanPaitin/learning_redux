@@ -1,38 +1,22 @@
 import React from 'react';
-import { connect } from 'react-redux';
+import { NavLink } from 'react-router-dom';
 
-const Link = ({ active, children, onClick }) => {
-  return active ? <span>{children}</span> :
-    <a
-      href='#'
-      onClick={e => {
-        e.preventDefault();
-        onClick()
-      }} >
-      {children}
-    </a>
-}
-
-const setVisibilityFilter = filter => ({
-  type: 'SET_VISIBILITY_FILTER',
-  filter
-})
-
-const mapStateToProps = (state, { filter }) => ({
-  active: filter === state.visibilityFilter
-})
-
-const mapDispatchToProps = (dispatch, { filter }) => ({
-  onClick: () => dispatch(setVisibilityFilter(filter))
-})
-
-const FilterLink = connect(mapStateToProps, mapDispatchToProps)(Link)
+const FilterLink = ({ filter, children }) =>
+  <NavLink
+    exact
+    to={`/${filter === 'all' ? '' : filter}`}
+    activeStyle={{
+      textDecoration: 'none',
+      color: '#000'
+    }}>
+    {children}
+  </NavLink>
 
 export default () =>
   <p>
     Show:
     {'  '}
-    <FilterLink filter='SHOW_ALL'>All</FilterLink>&nbsp;&nbsp;
-    <FilterLink filter='SHOW_ACTIVE'>Active</FilterLink>&nbsp;&nbsp;
-    <FilterLink filter='SHOW_COMPLETED'>Completed</FilterLink>&nbsp;&nbsp;
+    <FilterLink filter='all'>All</FilterLink>&nbsp;&nbsp;
+    <FilterLink filter='active'>Active</FilterLink>&nbsp;&nbsp;
+    <FilterLink filter='complete'>Complete</FilterLink>
   </p>
