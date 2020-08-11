@@ -4,6 +4,11 @@ const addTodo = 'ADD_TODO';
 const toggleTodo = 'TOGGLE_TODO';
 const removeTodo = 'REMOVE_TODO';
 
+export const actions = {
+  toggleTodo: id => ({ type: 'TOGGLE_TODO', id }),
+  removeTodo: id => ({ type: 'REMOVE_TODO', id })
+}
+
 const todo = (state, action) => {
   switch(action.type) {
     case addTodo:

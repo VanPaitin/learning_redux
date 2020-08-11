@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
-import { getVisibleTodos } from '../todoReducer';
+import { actions, getVisibleTodos } from '../todoReducer';
 
 const Todo = ({ completed, text, onClick, removeTodo }) =>
   <li
@@ -27,10 +27,6 @@ const TodoList = ({ todos, onTodoClick, removeTodo }) =>
     )}
   </ul>
 
-const toggleTodo = id => ({ type: 'TOGGLE_TODO', id })
-
-const removeTodo = id => ({ type: 'REMOVE_TODO', id })
-
 const mapStateToProps = (state, { match: { params: { filter } } }) => ({
   todos: getVisibleTodos(state, filter)
 })
@@ -42,5 +38,5 @@ const mapStateToProps = (state, { match: { params: { filter } } }) => ({
 
 export default withRouter(connect(
   mapStateToProps,
-  { onTodoClick: toggleTodo, removeTodo: removeTodo }
+  { onTodoClick: actions.toggleTodo, removeTodo: actions.removeTodo }
 )(TodoList))
