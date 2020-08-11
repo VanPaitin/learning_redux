@@ -20,33 +20,39 @@ const todo = (state, action) => {
   }
 }
 
-export const todos = (state = [], action) => {
-  switch(action.type) {
+const byId = (state = {}, action) => {
+  switch (action.type) {
     case addTodo:
-      return [...state, todo(undefined, action)]
     case toggleTodo:
-      return state.map(todoItem => todo(todoItem, action));
+      return {
+        ...state, [action.id]: todo(state[action.id], action)
+      }
     case removeTodo:
-      return state.filter(todoItem => todoItem.id !== action.id)
-    default:
-     return state
+      delete (state[action.id])
+      return { ...state }
+    default: return state
   }
 }
 
-export const getVisibleTodos = ({ todos }, filter) => {
+const allIds = (state = [], action) => {
+  switch (action.type) {
+    case addTodo: return [...state, action.id]
+    case removeTodo: return state.filter(id => id !== action.id)
+    default: return state
+  }
+}
+
+const getAllTodos = state => state.allIds.map(id => state.byId[id])
+
+export const getVisibleTodos = (state, filter) => {
+  const allTodos = getAllTodos(state);
+
   switch (filter) {
-    case 'active': return todos.filter(todo => !todo.completed)
-    case 'complete': return todos.filter(todo => todo.completed)
-    default: return todos
+    case 'active': return allTodos.filter(todo => !todo.completed)
+    case 'complete': return allTodos.filter(todo => todo.completed)
+    default: return allTodos
   }
 }
-
-// const visibilityFilter = (state = 'SHOW_ALL', action) => {
-//   switch (action.type) {
-//     case 'SET_VISIBILITY_FILTER': return action.filter
-//     default: return state;
-//   }
-// }
 
 // const todoApp = (state = {}, action) => {
 //   return {
@@ -57,4 +63,4 @@ export const getVisibleTodos = ({ todos }, filter) => {
 //   }
 // }
 
-export const todoApp = combineReducers({ todos })
+export const todoApp = combineReducers({ byId, allIds })

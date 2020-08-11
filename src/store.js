@@ -7,10 +7,13 @@ import { loadState, saveState } from './localstorage';
 
 export default () => {
   const persistedState = loadState()
-
   const store = createStore(todoApp, persistedState, composeWithDevTools())
 
-  store.subscribe(throttle(() => saveState({ todos: store.getState().todos }), 1000))
+  store.subscribe(throttle(() => {
+    const { byId, allIds } = store.getState()
+
+    saveState({ byId, allIds })
+  }, 1000))
 
   return store
 }
