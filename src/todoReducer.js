@@ -6,7 +6,8 @@ const removeTodo = 'REMOVE_TODO';
 
 export const actions = {
   toggleTodo: id => ({ type: 'TOGGLE_TODO', id }),
-  removeTodo: id => ({ type: 'REMOVE_TODO', id })
+  removeTodo: id => ({ type: 'REMOVE_TODO', id }),
+  receiveTodos: (filter, response) => ({ type: 'RECEIVE_TODOS', filter, response })
 }
 
 const todo = (state, action) => {
@@ -58,14 +59,5 @@ export const getVisibleTodos = (state, filter) => {
     default: return allTodos
   }
 }
-
-// const todoApp = (state = {}, action) => {
-//   return {
-//     todos: todos(
-//       state.todos, action
-//     ),
-//     visibilityFilter: visibilityFilter(state.visibilityFilter, action)
-//   }
-// }
 
 export const todoApp = combineReducers({ byId, allIds })

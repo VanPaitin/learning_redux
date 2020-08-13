@@ -2,6 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import { actions, getVisibleTodos } from '../todoReducer';
+import { fetchTodos } from '../api/fakeDatabase';
 
 const Todo = ({ completed, text, onClick, removeTodo }) =>
   <li
@@ -27,16 +28,36 @@ const TodoList = ({ todos, onTodoClick, removeTodo }) =>
     )}
   </ul>
 
-const mapStateToProps = (state, { match: { params: { filter } } }) => ({
-  todos: getVisibleTodos(state, filter)
-})
+class VisibleTodoList extends React.Component {
+  componentDidMount() {
+    this.fetchData();
+  }
 
-// const mapDispatchToProps = dispatch => ({
-//   onTodoClick: id => dispatch(toggleTodo(id)),
-//   removeTodo: id => dispatch(removeTodo(id))
-// })
+  componentDidUpdate(prevProps) {
+    if (this.props.filter !== prevProps.filter) {
+      this.fetchData();
+    }
+  }
+
+  fetchData() {
+    const { filter, receiveTodos } = this.props;
+    fetchTodos(filter).then(todos => receiveTodos(filter, todos))
+  }
+
+  render() {
+    return <TodoList {...this.props} />
+  }
+}
+
+const mapStateToProps = (state, { match: { params: { filter } } }) => ({
+  todos: getVisibleTodos(state, filter), filter: filter || 'all'
+})
 
 export default withRouter(connect(
   mapStateToProps,
-  { onTodoClick: actions.toggleTodo, removeTodo: actions.removeTodo }
-)(TodoList))
+  {
+    onTodoClick: actions.toggleTodo,
+    removeTodo: actions.removeTodo,
+    receiveTodos: actions.receiveTodos
+  }
+)(VisibleTodoList))
