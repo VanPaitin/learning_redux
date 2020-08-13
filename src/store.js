@@ -1,17 +1,18 @@
-import { createStore } from 'redux';
+import { createStore, applyMiddleware } from 'redux';
+import promise from 'redux-promise';
+import { createLogger } from 'redux-logger';
 import { composeWithDevTools } from 'redux-devtools-extension';
 import throttle from 'lodash/throttle';
 
 import { todoApp } from './todoReducer';
 import { loadState, saveState } from './localstorage';
 
-const addLoggingToDispatch = store => {
-  const rawDispatch = store.dispatch;
+const addLoggingToDispatch = store => next => {
   return (action) => {
     console.group(action.type)
     console.log('%c Previous state: ', 'color: gray', store.getState())
     console.log('%c Action: ', 'color: blue', action)
-    const returnValue = rawDispatch(action);
+    const returnValue = next(action);
     console.log('%c Next state: ', 'color: green', store.getState())
     console.groupEnd(action.type);
 
@@ -19,13 +20,34 @@ const addLoggingToDispatch = store => {
   }
 }
 
+const addPromiseSupportToDispatch = _store => (next) => {
+  return (action) => {
+    if (typeof action.then === 'function') {
+      return action.then(next)
+    }
+    return next(action)
+  }
+};
+
+const wrapDispatchWithMiddleWares = (store, middleWares) => {
+  middleWares.forEach(middleWare => {
+    store.dispatch = middleWare(store)(store.dispatch)
+  })
+}
+
 export default () => {
   const persistedState = loadState()
-  const store = createStore(todoApp, persistedState, composeWithDevTools())
+  const middleWares = [promise]
 
   if (process.env.NODE_ENV !== 'production') {
-    store.dispatch = addLoggingToDispatch(store)
+    middleWares.push(createLogger());
   }
+
+  // middleWares.push(addPromiseSupportToDispatch)
+  const store = createStore(
+    todoApp, persistedState,
+    composeWithDevTools(applyMiddleware(...middleWares))
+  )
 
   store.subscribe(throttle(() => {
     const { byId, allIds } = store.getState()
