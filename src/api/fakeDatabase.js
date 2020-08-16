@@ -13,7 +13,7 @@ const fakeDatabase = {
     {
       id: v4(),
       text: 'Holy Spirit',
-      completed: false
+      completed: true
     },
     {
       id: v4(),

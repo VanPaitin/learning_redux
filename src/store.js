@@ -36,7 +36,7 @@ const wrapDispatchWithMiddleWares = (store, middleWares) => {
 }
 
 export default () => {
-  const persistedState = loadState()
+  // const persistedState = loadState()
   const middleWares = [promise]
 
   if (process.env.NODE_ENV !== 'production') {
@@ -45,14 +45,14 @@ export default () => {
 
   // middleWares.push(addPromiseSupportToDispatch)
   const store = createStore(
-    todoApp, persistedState,
+    todoApp, //persistedState,
     composeWithDevTools(applyMiddleware(...middleWares))
   )
 
   store.subscribe(throttle(() => {
-    const { byId, allIds } = store.getState()
+    const { byId, idsByFilter } = store.getState()
 
-    saveState({ byId, allIds })
+    saveState({ byId, idsByFilter })
   }, 1000))
 
   return store

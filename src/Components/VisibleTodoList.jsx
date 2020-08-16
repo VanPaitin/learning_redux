@@ -21,10 +21,10 @@ const Todo = ({ completed, text, onClick, removeTodo }) =>
     </a>
   </li>
 
-const TodoList = ({ todos, onTodoClick, removeTodo }) =>
+const TodoList = ({ todos, onTodoClick, removeTodo, filter }) =>
   <ul>
     {todos.map(todo =>
-      <Todo key={todo.id} {...todo} onClick={() => onTodoClick(todo.id)} removeTodo={() => removeTodo(todo.id)}/>
+      <Todo key={todo.id} {...todo} onClick={() => onTodoClick(todo.id)} removeTodo={() => removeTodo(todo.id, filter)}/>
     )}
   </ul>
 
@@ -49,9 +49,12 @@ class VisibleTodoList extends React.Component {
   }
 }
 
-const mapStateToProps = (state, { match: { params: { filter } } }) => ({
-  todos: getVisibleTodos(state, filter), filter: filter || 'all'
-})
+const mapStateToProps = (state, { match: { params: { filter: filterParam } } }) => {
+  const filter = filterParam || 'all'
+  return {
+    todos: getVisibleTodos(state, filter), filter
+  }
+}
 
 export default withRouter(connect(
   mapStateToProps,

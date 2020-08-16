@@ -1,12 +1,13 @@
 import { combineReducers } from 'redux';
+import byId, * as fromById from './byId';
+import createList from './createList';
 
 const addTodo = 'ADD_TODO';
 const toggleTodo = 'TOGGLE_TODO';
-const removeTodo = 'REMOVE_TODO';
 
 export const actions = {
   toggleTodo: id => ({ type: 'TOGGLE_TODO', id }),
-  removeTodo: id => ({ type: 'REMOVE_TODO', id }),
+  removeTodo: (id, filter) => ({ type: 'REMOVE_TODO', id, filter }),
   receiveTodos: (filter, response) => ({ type: 'RECEIVE_TODOS', filter, response })
 }
 
@@ -26,38 +27,15 @@ const todo = (state, action) => {
   }
 }
 
-const byId = (state = {}, action) => {
-  switch (action.type) {
-    case addTodo:
-    case toggleTodo:
-      return {
-        ...state, [action.id]: todo(state[action.id], action)
-      }
-    case removeTodo:
-      delete (state[action.id])
-      return { ...state }
-    default: return state
-  }
-}
-
-const allIds = (state = [], action) => {
-  switch (action.type) {
-    case addTodo: return [...state, action.id]
-    case removeTodo: return state.filter(id => id !== action.id)
-    default: return state
-  }
-}
-
-const getAllTodos = state => state.allIds.map(id => state.byId[id])
+const listByFilter = combineReducers({
+  all: createList('all'),
+  active: createList('active'),
+  completed: createList('completed')
+})
 
 export const getVisibleTodos = (state, filter) => {
-  const allTodos = getAllTodos(state);
-
-  switch (filter) {
-    case 'active': return allTodos.filter(todo => !todo.completed)
-    case 'complete': return allTodos.filter(todo => todo.completed)
-    default: return allTodos
-  }
+  const ids = state.listByFilter[filter];
+  return ids.map(id => fromById.getTodo(state.byId, id))
 }
 
-export const todoApp = combineReducers({ byId, allIds })
+export const todoApp = combineReducers({ byId, listByFilter })

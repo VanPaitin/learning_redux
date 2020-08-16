@@ -18,5 +18,5 @@ export default () =>
     {'  '}
     <FilterLink filter='all'>All</FilterLink>&nbsp;&nbsp;
     <FilterLink filter='active'>Active</FilterLink>&nbsp;&nbsp;
-    <FilterLink filter='complete'>Complete</FilterLink>
+    <FilterLink filter='completed'>Complete</FilterLink>
   </p>
