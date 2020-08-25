@@ -1,30 +1,12 @@
 import { combineReducers } from 'redux';
 import byId, * as fromById from './byId';
-import createList from './createList';
-
-const addTodo = 'ADD_TODO';
-const toggleTodo = 'TOGGLE_TODO';
+import createList, * as fromList from './createList';
 
 export const actions = {
   toggleTodo: id => ({ type: 'TOGGLE_TODO', id }),
-  removeTodo: (id, filter) => ({ type: 'REMOVE_TODO', id, filter }),
+  removeTodo: (id) => ({ type: 'REMOVE_TODO', id }),
+  requestTodos: filter => ({ type: 'REQUEST_TODOS', filter }),
   receiveTodos: (filter, response) => ({ type: 'RECEIVE_TODOS', filter, response })
-}
-
-const todo = (state, action) => {
-  switch(action.type) {
-    case addTodo:
-      return {
-        id: action.id,
-        text: action.text,
-        completed: false
-      }
-    case toggleTodo:
-      const completed = state.completed
-      return { ...state, completed: state.id == action.id ? !completed : completed }
-    default:
-      return state
-  }
 }
 
 const listByFilter = combineReducers({
@@ -34,8 +16,11 @@ const listByFilter = combineReducers({
 })
 
 export const getVisibleTodos = (state, filter) => {
-  const ids = state.listByFilter[filter];
+  const ids = state.listByFilter[filter].ids;
   return ids.map(id => fromById.getTodo(state.byId, id))
 }
+
+export const getIsFetching = (state, filter) =>
+  fromList.getIsFetching(state.listByFilter[filter])
 
 export const todoApp = combineReducers({ byId, listByFilter })

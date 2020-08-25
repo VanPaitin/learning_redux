@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
-import { actions, getVisibleTodos } from '../todoReducer';
+import { actions, getVisibleTodos, getIsFetching } from '../todoReducer';
 import { fetchTodos } from '../api/fakeDatabase';
 
 const Todo = ({ completed, text, onClick, removeTodo }) =>
@@ -21,10 +21,10 @@ const Todo = ({ completed, text, onClick, removeTodo }) =>
     </a>
   </li>
 
-const TodoList = ({ todos, onTodoClick, removeTodo, filter }) =>
+const TodoList = ({ todos, onTodoClick, removeTodo }) =>
   <ul>
     {todos.map(todo =>
-      <Todo key={todo.id} {...todo} onClick={() => onTodoClick(todo.id)} removeTodo={() => removeTodo(todo.id, filter)}/>
+      <Todo key={todo.id} {...todo} onClick={() => onTodoClick(todo.id)} removeTodo={() => removeTodo(todo.id)}/>
     )}
   </ul>
 
@@ -40,27 +40,33 @@ class VisibleTodoList extends React.Component {
   }
 
   fetchData() {
-    const { filter, receiveTodos } = this.props;
-    fetchTodos(filter).then(todos => receiveTodos(filter, todos))
+    const { filter, requestTodos, receiveTodos } = this.props;
+
+    requestTodos(filter);
+    fetchTodos(filter).then(todos => receiveTodos(filter, todos));
   }
 
   render() {
-    return <TodoList {...this.props} />
+    const { todos, toggleTodo, removeTodo, isFetching } = this.props
+
+    if (isFetching && !todos.length) {
+      return <p>Loading...</p>
+    }
+
+    return <TodoList todos={todos} onTodoClick={toggleTodo} removeTodo={removeTodo} />
   }
 }
 
 const mapStateToProps = (state, { match: { params: { filter: filterParam } } }) => {
   const filter = filterParam || 'all'
   return {
-    todos: getVisibleTodos(state, filter), filter
+    todos: getVisibleTodos(state, filter),
+    isFetching: getIsFetching(state, filter),
+    filter
   }
 }
 
 export default withRouter(connect(
   mapStateToProps,
-  {
-    onTodoClick: actions.toggleTodo,
-    removeTodo: actions.removeTodo,
-    receiveTodos: actions.receiveTodos
-  }
+  actions
 )(VisibleTodoList))
